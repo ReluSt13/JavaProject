@@ -9,9 +9,6 @@ public class item {
     private Date addDate;
     private Date updateDate;
 
-    public item() {
-    }
-
     public item(String content, Date addDate, Date updateDate) {
         this.id = id_max++;
         this.content = content;
@@ -28,7 +25,7 @@ public class item {
         this.updateDate = new Date();
     }
 
-    public void printItem() {
+    public void print() {
         System.out.println("ID: " + id + "\nContent: " + content + "\nAdd Date: " + addDate + "\nUpdate Date: " + updateDate);
     }
 
