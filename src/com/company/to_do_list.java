@@ -7,7 +7,7 @@ public class to_do_list extends list{
     //maybe add nrOfCompletedItems...
     private void updatePercentage() {
         int nrOfItemsCompleted = 0;
-        for (item item : this.list) {
+        for (item item : this.getList()) {
             if (((to_do_item) item).isComplete()) nrOfItemsCompleted++;
         }
         this.percentageComplete = (double) nrOfItemsCompleted / this.getNrOfItems() * 100;

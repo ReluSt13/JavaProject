@@ -54,14 +54,19 @@ public class Main {
 //                tdl.deleteLastItem();
 //                tdl.print();
             shopping_item shopItem = new shopping_item("tomato", 2, 5.3);
-            shopping_list shopList = new shopping_list("monday shopping list", 55.5);
+            shopping_list shopList = new shopping_list("monday shopping list", 105.5);
             shopList.addToList(shopItem);
             shopList.addToList(new shopping_item("potato", 10, 2.1));
             shopList.addToList(new shopping_item("apple", 4, 3.1));
             shopList.addToList(new shopping_item("pear", 4, 1.1));
-            shopList.print();
+            shopList.addToList(shopItem);
+
             shopList.deleteItemById(2);
             shopList.print();
+            shopList.printSorted();
+            shopList.printUnique();
+            shopList.deleteLastItem();
+            shopList.printUnique();
 
         } catch (Exception e) {
                 System.out.println(e.getMessage());

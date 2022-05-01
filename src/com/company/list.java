@@ -7,14 +7,16 @@ public class list {
     private static int id_max = 0;
     private int nrOfItems;
     private int nrOfUniqueItems;
+    private Date addDate;
     private String listName;
-    protected List<item> list = new ArrayList<>();
+    private List<item> list = new ArrayList<>();
     private Set<item> uniqueList = new HashSet<>();
 
     public list(String listName) {
         this.id = id_max++;
         this.nrOfItems = 0;
         this.listName = listName;
+        this.addDate = new Date();
     }
     public void addToList(item itemToBeAdded) {
         this.list.add(itemToBeAdded);
@@ -23,7 +25,7 @@ public class list {
     }
 
     public void print() {
-        System.out.println("List ID: " + id + "\nList name: " + listName + "\nNr. of items: " + nrOfItems);
+        System.out.println("List ID: " + this.id + "\nList name: " + this.listName + "\nCreate date: " + this.addDate + "\nNr. of items: " + this.nrOfItems);
         if(this.getNrOfItems() == 0) System.out.println("The list is empty :(");
         else {
             int index = 0;
@@ -37,8 +39,7 @@ public class list {
     }
 
     public void printUnique() {
-        System.out.println("---------------------------------------------------------------");
-        System.out.println("List ID:" + id + "\nList name: " + listName + "\nNr. of unique items: " + nrOfUniqueItems);
+        System.out.println("List ID:" + id + "\nList name: " + listName + "\nCreate date: " + this.addDate + "\nNr. of unique items: " + this.nrOfUniqueItems);
         int index = 0;
         for (item item :
                 this.uniqueList) {
@@ -51,6 +52,8 @@ public class list {
     public void deleteLastItem() {
         if (this.getNrOfItems() > 0) {
             this.list.remove(this.getNrOfItems() - 1);
+            List<item> unique = new ArrayList<>(uniqueList);
+            this.uniqueList.remove(unique.get(unique.size() - 1));
             this.updateAttributes();
         }
     }
@@ -58,6 +61,7 @@ public class list {
     public void deleteItemById(int id) {
         if(id < 0) throw new IllegalArgumentException("ID-ul nu poate fi negativ");
         this.list.removeIf(item -> item.getId() == id);
+        this.uniqueList.removeIf(item -> item.getId() == id);
         this.updateAttributes();
     }
 
@@ -83,5 +87,17 @@ public class list {
 
     public String getListName() {
         return listName;
+    }
+
+    public Date getAddDate() {
+        return addDate;
+    }
+
+    public List<item> getList() {
+        return list;
+    }
+
+    public Set<item> getUniqueList() {
+        return uniqueList;
     }
 }
