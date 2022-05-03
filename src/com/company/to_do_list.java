@@ -26,7 +26,7 @@ public class to_do_list extends list{
     @Override
     public void print() {
         this.updateAttributes();
-        System.out.println("Percentage complete: " + new DecimalFormat("#.00").format(this.percentageComplete) + "%");
+        System.out.println("Percentage complete: " + (this.percentageComplete == 0 ? "0" : new DecimalFormat("#.00").format(this.percentageComplete)) + "%");
         super.print();
     }
 

@@ -62,11 +62,28 @@ public class Main {
             shopList.addToList(shopItem);
 
             shopList.deleteItemById(2);
-            shopList.print();
-            shopList.printSorted();
-            shopList.printUnique();
+            //shopList.print();
+            //shopList.printSorted();
+            //shopList.printUnique();
             shopList.deleteLastItem();
-            shopList.printUnique();
+            //shopList.printUnique();
+
+            notebook agenda = notebook.getInstance();
+            agenda.addList(shopList);
+            to_do_list todoList = new to_do_list("tuesday to do list");
+            todoList.addToList(new to_do_item("run 5km"));
+            todoList.addToList(new to_do_item("drink 2.5 liters of water"));
+            todoList.addToList(new to_do_item("read 30 pages of a book"));
+            ((to_do_item)todoList.getItem(5)).complete();
+            agenda.addList(todoList);
+            list emptyList = new list("Empty list");
+            agenda.addList(emptyList);
+            agenda.print();
+            agenda.deleteListById(2);
+            agenda.print();
+            ((shopping_list) agenda.getListById(0)).updateMaxPrice(205.75);
+            agenda.print();
+
 
         } catch (Exception e) {
                 System.out.println(e.getMessage());
