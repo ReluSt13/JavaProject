@@ -83,6 +83,8 @@ public class Main {
             agenda.print();
             ((shopping_list) agenda.getListById(0)).updateMaxPrice(205.75);
             agenda.print();
+            agenda.deleteLastList();
+            agenda.print();
 
 
         } catch (Exception e) {

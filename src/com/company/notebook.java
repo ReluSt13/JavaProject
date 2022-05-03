@@ -43,4 +43,14 @@ public class notebook {
         this.nrOfLists = this.notebook.size();
     }
 
+    public void deleteLastList() {
+        if (this.nrOfLists > 0) {
+            this.notebook.remove(this.nrOfLists - 1);
+            this.nrOfLists = this.notebook.size();
+        }
+    }
+
+    public int getNrOfLists() {
+        return nrOfLists;
+    }
 }
