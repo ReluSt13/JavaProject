@@ -1,5 +1,7 @@
 package com.company;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class item {
@@ -9,6 +11,13 @@ public class item {
     private Date addDate;
     private Date updateDate;
 
+    public item(int id, String content, Date addDate, Date updateDate) {
+        this.id = id;
+        this.content = content;
+        this.addDate = addDate;
+        this.updateDate = updateDate;
+    }
+
     public item(String content, Date addDate, Date updateDate) {
         this.id = id_max++;
         this.content = content;
@@ -16,7 +25,7 @@ public class item {
         this.updateDate = updateDate;
     }
 
-    public item(String content) {
+    public item(String content){
         this(content, new Date(), null);
     }
 
@@ -43,6 +52,10 @@ public class item {
 
     public Date getUpdateDate() {
         return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 
     @Override

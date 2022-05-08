@@ -1,8 +1,18 @@
 package com.company;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.util.Date;
+
 public class shopping_item extends item{
     private int quantity;
     private double price;
+
+    public shopping_item(int id, String content, Date addDate, Date updateDate, int quantity, double price) {
+        super(id, content, addDate, updateDate);
+        this.quantity = quantity;
+        this.price = price;
+    }
 
     public shopping_item(String content, int quantity, double price) {
         super(content);
@@ -18,10 +28,12 @@ public class shopping_item extends item{
 
     public void updateQuantity(int newQuantity) {
         this.quantity = newQuantity;
+        this.setUpdateDate(new Date());
     }
 
     public void updatePrice(double newPrice) {
         this.price = newPrice;
+        this.setUpdateDate(new Date());
     }
 
     public double getTotalPrice() {
@@ -49,6 +61,6 @@ public class shopping_item extends item{
         super.print();
         System.out.println("Price: $" + this.price);
         System.out.println("Quantity: " + this.quantity);
-        System.out.println("Total price: $" + this.getTotalPrice());
+        System.out.println("Total price: $" + new DecimalFormat("#.00").format(this.getTotalPrice()));
     }
 }

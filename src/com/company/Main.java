@@ -1,5 +1,7 @@
 package com.company;
 
+import java.util.Date;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -53,39 +55,52 @@ public class Main {
 //                tdl.deleteLastItem();
 //                tdl.deleteLastItem();
 //                tdl.print();
-            shopping_item shopItem = new shopping_item("tomato", 2, 5.3);
-            shopping_list shopList = new shopping_list("monday shopping list", 105.5);
-            shopList.addToList(shopItem);
-            shopList.addToList(new shopping_item("potato", 10, 2.1));
-            shopList.addToList(new shopping_item("apple", 4, 3.1));
-            shopList.addToList(new shopping_item("pear", 4, 1.1));
-            shopList.addToList(shopItem);
+//            shopping_item shopItem = new shopping_item("tomato", 2, 5.3);
+//            shopping_list shopList = new shopping_list("monday shopping list", 105.5);
+//            shopList.addToList(shopItem);
+//            shopList.addToList(new shopping_item("potato", 10, 2.1));
+//            shopList.addToList(new shopping_item("apple", 4, 3.1));
+//            shopList.addToList(new shopping_item("pear", 4, 1.1));
+//            shopList.addToList(shopItem);
+//
+//            shopList.deleteItemById(2);
+//            //shopList.print();
+//            //shopList.printSorted();
+//            //shopList.printUnique();
+//            shopList.deleteLastItem();
+//            //shopList.printUnique();
+//
+//            notebook agenda = notebook.getInstance();
+//            agenda.addList(shopList);
+//            to_do_list todoList = new to_do_list("tuesday to do list");
+//            todoList.addToList(new to_do_item("run 5km"));
+//            todoList.addToList(new to_do_item("drink 2.5 liters of water"));
+//            todoList.addToList(new to_do_item("read 30 pages of a book"));
+//            ((to_do_item)todoList.getItem(5)).complete();
+//            agenda.addList(todoList);
+//            list emptyList = new list("Empty list");
+//            agenda.addList(emptyList);
+//            agenda.print();
+//            agenda.deleteListById(2);
+//            agenda.print();
+//            ((shopping_list) agenda.getListById(0)).updateMaxPrice(205.75);
+//            agenda.print();
+//            agenda.deleteLastList();
+//            agenda.print();
+//            ((shopping_list) agenda.getListById(0)).printSorted();
 
-            shopList.deleteItemById(2);
-            //shopList.print();
-            //shopList.printSorted();
-            //shopList.printUnique();
-            shopList.deleteLastItem();
-            //shopList.printUnique();
+            shopping_item shopItem = new shopping_item("tomato", 3, 1.2);
+            shopItem.updateContent("tomat");
 
-            notebook agenda = notebook.getInstance();
-            agenda.addList(shopList);
-            to_do_list todoList = new to_do_list("tuesday to do list");
-            todoList.addToList(new to_do_item("run 5km"));
-            todoList.addToList(new to_do_item("drink 2.5 liters of water"));
-            todoList.addToList(new to_do_item("read 30 pages of a book"));
-            ((to_do_item)todoList.getItem(5)).complete();
-            agenda.addList(todoList);
-            list emptyList = new list("Empty list");
-            agenda.addList(emptyList);
-            agenda.print();
-            agenda.deleteListById(2);
-            agenda.print();
-            ((shopping_list) agenda.getListById(0)).updateMaxPrice(205.75);
-            agenda.print();
-            agenda.deleteLastList();
-            agenda.print();
-
+            shoppingItemCsvService shopItemService = new shoppingItemCsvService();
+            shopItemService.add(shopItem);
+            shopItemService.add(new shopping_item("potato", 10, 0.5));
+            shopItemService.add(new shopping_item("garlic", 7, 0.1));
+            shopItemService.add(new shopping_item("onion", 5, 0.4));
+            shopItemService.getItemsBetweenDates(new Date(new Date().getTime() - 60 * 60 * 1000), new Date(new Date().getTime() - 30 * 60 * 1000)).forEach(i -> i.print());
+            shopItemService.updateContent(1, "potat");
+            shopItemService.updateQuantity(2, 9);
+            shopItemService.getAll().forEach(item::print);
 
         } catch (Exception e) {
                 System.out.println(e.getMessage());
