@@ -6,15 +6,15 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class toDoListCsvService implements listService{
+public class shoppingListCsvService implements listService{
 
-    private final File toDoListFile;
+    private final File shoppingListFile;
 
-    public toDoListCsvService() {
-        this.toDoListFile = new File("src/resources/toDoListFile.csv");
-        if(!this.toDoListFile.exists()) {
+    public shoppingListCsvService() {
+        this.shoppingListFile = new File("src/resources/shoppingListFile.csv");
+        if(!this.shoppingListFile.exists()) {
             try{
-                this.toDoListFile.createNewFile();
+                this.shoppingListFile.createNewFile();
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
@@ -23,16 +23,15 @@ public class toDoListCsvService implements listService{
 
     @Override
     public void add(list listToAdd) {
-
         FileWriter fileWriter = null;
         BufferedWriter bufferedWriter = null;
         try {
-            fileWriter = new FileWriter(this.toDoListFile, true);
+            fileWriter = new FileWriter(this.shoppingListFile, true);
             bufferedWriter = new BufferedWriter(fileWriter);
-            boolean toDoListAlreadyExists = getAll().stream()
+            boolean shoppingListAlreadyExists = getAll().stream()
                     .anyMatch(storedList -> storedList.getId() == listToAdd.getId()
                     );
-            if (!toDoListAlreadyExists) {
+            if (!shoppingListAlreadyExists) {
                 bufferedWriter.write(formatForCsv(listToAdd));
                 bufferedWriter.write("\n");
             }
@@ -63,7 +62,7 @@ public class toDoListCsvService implements listService{
     @Override
     public List<list> getAll() {
         try {
-            FileReader fileReader = new FileReader(this.toDoListFile);
+            FileReader fileReader = new FileReader(this.shoppingListFile);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
             return bufferedReader.lines()
@@ -78,16 +77,15 @@ public class toDoListCsvService implements listService{
 
     @Override
     public void delete(list ListToDelete) {
-
         List<list> remainingLists = getAll().stream()
                 .filter(storedList -> storedList.getId() != ListToDelete.getId())
                 .collect(Collectors.toList());
 
-        try(FileWriter fileWriter = new FileWriter(this.toDoListFile, false)) {
+        try(FileWriter fileWriter = new FileWriter(this.shoppingListFile, false)) {
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
-            for(list toDoLists : remainingLists) {
-                bufferedWriter.write(formatForCsv(toDoLists));
+            for(list shoppingLists : remainingLists) {
+                bufferedWriter.write(formatForCsv(shoppingLists));
                 bufferedWriter.write("\n");
             }
 
@@ -95,7 +93,6 @@ public class toDoListCsvService implements listService{
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-
     }
 
     private list getToDoListFromCsvLine(String line) {
@@ -104,29 +101,33 @@ public class toDoListCsvService implements listService{
             List<item> deserializedList = new ArrayList<>();
             int i = 0;
             for (int j = 0; j < Integer.parseInt(values[2]); j++){
-                int id = Integer.parseInt(values[5 + i].substring(15));
+                int id = Integer.parseInt(values[6 + i].substring(18));
                 i++;
-                String content = values[5 + i].substring(10).replace("'", "");
+                String content = values[6 + i].substring(10).replace("'", "");
                 i++;
-                Date addDate = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.getDefault()).parse(values[5 + i].substring(9));
+                Date addDate = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.getDefault()).parse(values[6 + i].substring(9));
                 i++;
-                Date updateDate = !values[5 + i].substring(12).equals("null") ? new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.getDefault()).parse(values[5 + i].substring(12)) : null;
+                Date updateDate = !values[6 + i].substring(12).equals("null") ? new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.getDefault()).parse(values[6 + i].substring(12)) : null;
                 i++;
-                boolean complete = Boolean.parseBoolean(values[5 + i].substring(13, values[5 + i].indexOf("}")));
+                int quantity = Integer.parseInt(values[6 + i].substring(10));
+                i++;
+                double price = Double.parseDouble(values[6 + i].substring(7).replace("}", "").replace("]", ""));
                 i++;
 //                System.out.println(id);
 //                System.out.println(content);
 //                System.out.println(addDate);
 //                System.out.println(updateDate);
-//                System.out.println(complete);
-                deserializedList.add(new to_do_item(id, content, addDate, updateDate, complete));
+//                System.out.println(quantity);
+//                System.out.println(price);
+                deserializedList.add(new shopping_item(id, content, addDate, updateDate, quantity, price));
             }
-            return new to_do_list(
+            return new shopping_list(
                     Integer.parseInt(values[0]),
                     values[1],
                     Integer.parseInt(values[2]),
                     new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.getDefault()).parse(values[3]),
                     Double.parseDouble(values[4]),
+                    Double.parseDouble(values[5]),
                     deserializedList
             );
 
@@ -146,10 +147,13 @@ public class toDoListCsvService implements listService{
         stringBuilder.append(",");
         stringBuilder.append(List.getAddDate());
         stringBuilder.append(",");
-        stringBuilder.append(((to_do_list) List).getPercentageComplete());
+        stringBuilder.append(((shopping_list) List).getActualPrice());
+        stringBuilder.append(",");
+        stringBuilder.append(((shopping_list) List).getMaxPrice());
         stringBuilder.append(",");
         stringBuilder.append(List.getList());
 
         return stringBuilder.toString();
     }
+
 }

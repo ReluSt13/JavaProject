@@ -122,6 +122,15 @@ public class Main {
             toDoListService.updateName(0, "TO DO LIST");
             toDoListService.getAll().forEach(list::print);
 
+            shoppingListCsvService shoppingListService = new shoppingListCsvService();
+            shopping_item shopItem = new shopping_item("tomato", 2, 5.3);
+            shopping_list shopList = new shopping_list("monday shopping list", 105.5);
+            shopList.addToList(shopItem);
+            shopList.addToList(new shopping_item("potato", 10, 2.1));
+            shopList.addToList(new shopping_item("apple", 4, 3.1));
+            shoppingListService.add(shopList);
+            shoppingListService.getAll().forEach(list::print);
+
 
         } catch (Exception e) {
                 System.out.println(e.getMessage());

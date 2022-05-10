@@ -3,6 +3,7 @@ package com.company;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class shopping_list extends list{
@@ -24,6 +25,12 @@ public class shopping_list extends list{
         this.maxPrice = maxPrice;
         this.actualPrice = 0;
         this.uniqueActualPrice = 0;
+    }
+
+    public shopping_list(int id, String listName, int nrOfItems, Date addDate, double actualPrice, double maxPrice, List<item> list) {
+        super(id, listName, nrOfItems, addDate, list);
+        this.maxPrice = maxPrice;
+        this.actualPrice = actualPrice;
     }
 
     public void updateMaxPrice(double newMaxPrice) {
@@ -88,5 +95,13 @@ public class shopping_list extends list{
         if(id < 0) throw new IllegalArgumentException("ID-ul nu poate fi negativ");
         this.sortedList.removeIf(item -> item.getId() == id);
         this.updateAttributes();
+    }
+
+    public double getMaxPrice() {
+        return maxPrice;
+    }
+
+    public double getActualPrice() {
+        return actualPrice;
     }
 }

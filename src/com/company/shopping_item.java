@@ -63,4 +63,16 @@ public class shopping_item extends item{
         System.out.println("Quantity: " + this.quantity);
         System.out.println("Total price: $" + new DecimalFormat("#.00").format(this.getTotalPrice()));
     }
+
+    @Override
+    public String toString() {
+        return "shopping_item{" +
+                "id=" + this.getId() +
+                ", content='" + this.getContent() + '\'' +
+                ", addDate=" + this.getAddDate() +
+                ", updateDate=" + this.getUpdateDate() +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                '}';
+    }
 }
