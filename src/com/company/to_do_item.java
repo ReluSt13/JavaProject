@@ -33,4 +33,15 @@ public class to_do_item extends item {
     public boolean isComplete() {
         return this.isCompleted;
     }
+
+    @Override
+    public String toString() {
+        return "to_do_item{" +
+                "id=" + this.getId() +
+                ", content='" + this.getContent() + '\'' +
+                ", addDate=" + this.getAddDate() +
+                ", updateDate=" + this.getUpdateDate() +
+                ", isCompleted=" + isCompleted +
+                '}';
+    }
 }

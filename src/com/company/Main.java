@@ -1,6 +1,6 @@
 package com.company;
 
-import java.util.Date;
+import java.util.List;
 
 public class Main {
 
@@ -89,26 +89,39 @@ public class Main {
 //            agenda.print();
 //            ((shopping_list) agenda.getListById(0)).printSorted();
 
-            shopping_item shopItem = new shopping_item("tomato", 3, 1.2);
-            shopItem.updateContent("tomat");
+//            shopping_item shopItem = new shopping_item("tomato", 3, 1.2);
+//            shopItem.updateContent("tomat");
+//
+//            shoppingItemCsvService shopItemService = new shoppingItemCsvService();
+//            shopItemService.add(shopItem);
+//            shopItemService.add(new shopping_item("potato", 10, 0.5));
+//            shopItemService.add(new shopping_item("garlic", 7, 0.1));
+//            shopItemService.add(new shopping_item("onion", 5, 0.4));
+//            shopItemService.getItemsBetweenDates(new Date(new Date().getTime() - 60 * 60 * 1000), new Date(new Date().getTime() - 30 * 60 * 1000)).forEach(i -> i.print());
+//            shopItemService.updateContent(1, "potat");
+//            shopItemService.updateQuantity(2, 9);
+//            shopItemService.getAll().forEach(item::print);
+//
+//            toDoItemCsvService toDoItemService = new toDoItemCsvService();
+//            toDoItemService.add(new to_do_item("run 5km"));
+//            toDoItemService.updateContent(4, "run 6km");
+//            toDoItemService.add(new to_do_item("do 50 push-ups"));
+//            toDoItemService.getAll().forEach(item::print);
+//            toDoItemService.complete(5);
+//            toDoItemService.getAll().forEach(item::print);
 
-            shoppingItemCsvService shopItemService = new shoppingItemCsvService();
-            shopItemService.add(shopItem);
-            shopItemService.add(new shopping_item("potato", 10, 0.5));
-            shopItemService.add(new shopping_item("garlic", 7, 0.1));
-            shopItemService.add(new shopping_item("onion", 5, 0.4));
-            shopItemService.getItemsBetweenDates(new Date(new Date().getTime() - 60 * 60 * 1000), new Date(new Date().getTime() - 30 * 60 * 1000)).forEach(i -> i.print());
-            shopItemService.updateContent(1, "potat");
-            shopItemService.updateQuantity(2, 9);
-            shopItemService.getAll().forEach(item::print);
+            to_do_list tdL = new to_do_list("to do list");
+            tdL.addToList(new to_do_item("run 10km in under 55mins"));
+            tdL.addToList(new to_do_item("run 5km in under 20mins", true));
+            toDoListCsvService toDoListService = new toDoListCsvService();
+            toDoListService.add(tdL);
+            toDoListService.add(new to_do_list("another to do list"));
+            toDoListService.getById(0).addToList(new to_do_item("do 10 chin-ups"));
+            ((to_do_item) toDoListService.getById(0).getItem(0)).complete();
+            toDoListService.getAll().forEach(list::print);
+            toDoListService.updateName(0, "TO DO LIST");
+            toDoListService.getAll().forEach(list::print);
 
-            toDoItemCsvService toDoItemService = new toDoItemCsvService();
-            toDoItemService.add(new to_do_item("run 5km"));
-            toDoItemService.updateContent(4, "run 6km");
-            toDoItemService.add(new to_do_item("do 50 push-ups"));
-            toDoItemService.getAll().forEach(item::print);
-            toDoItemService.complete(5);
-            toDoItemService.getAll().forEach(item::print);
 
         } catch (Exception e) {
                 System.out.println(e.getMessage());

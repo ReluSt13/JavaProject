@@ -18,6 +18,15 @@ public class list {
         this.listName = listName;
         this.addDate = new Date();
     }
+
+    public list(int id, String listName, int nrOfItems, Date addDate, List<item> list) {
+        this.id = id;
+        this.listName = listName;
+        this.nrOfItems = nrOfItems;
+        this.addDate = addDate;
+        this.list = list;
+    }
+
     public void addToList(item itemToBeAdded) {
         this.list.add(itemToBeAdded);
         this.uniqueList.add(itemToBeAdded);
@@ -77,6 +86,10 @@ public class list {
                 .orElse(null);
     }
 
+    public void updateListName(String newName) {
+        this.listName = newName;
+    }
+
     public int getId() {
         return id;
     }
@@ -100,4 +113,6 @@ public class list {
     public Set<item> getUniqueList() {
         return uniqueList;
     }
+
+
 }

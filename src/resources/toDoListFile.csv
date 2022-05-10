@@ -1,0 +1,2 @@
+1,another to do list,0,Tue May 10 20:38:02 EEST 2022,0.0,[]
+0,TO DO LIST,2,Tue May 10 20:38:02 EEST 2022,50.0,[to_do_item{id=0, content='run 10km in under 55mins', addDate=Tue May 10 20:38:02 EEST 2022, updateDate=null, isCompleted=false}, to_do_item{id=1, content='run 5km in under 20mins', addDate=Tue May 10 20:38:02 EEST 2022, updateDate=null, isCompleted=true}]
