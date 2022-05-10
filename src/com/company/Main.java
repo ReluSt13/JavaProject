@@ -102,6 +102,14 @@ public class Main {
             shopItemService.updateQuantity(2, 9);
             shopItemService.getAll().forEach(item::print);
 
+            toDoItemCsvService toDoItemService = new toDoItemCsvService();
+            toDoItemService.add(new to_do_item("run 5km"));
+            toDoItemService.updateContent(4, "run 6km");
+            toDoItemService.add(new to_do_item("do 50 push-ups"));
+            toDoItemService.getAll().forEach(item::print);
+            toDoItemService.complete(5);
+            toDoItemService.getAll().forEach(item::print);
+
         } catch (Exception e) {
                 System.out.println(e.getMessage());
         }

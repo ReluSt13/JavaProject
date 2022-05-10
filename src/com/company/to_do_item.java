@@ -1,5 +1,7 @@
 package com.company;
 
+import java.util.Date;
+
 public class to_do_item extends item {
     private boolean isCompleted;
 
@@ -11,6 +13,11 @@ public class to_do_item extends item {
     public to_do_item(String content) {
         super(content);
         this.isCompleted = false;
+    }
+
+    public to_do_item(int id, String content, Date addDate, Date updateDate, boolean isCompleted) {
+        super(id, content, addDate, updateDate);
+        this.isCompleted = isCompleted;
     }
 
     @Override
