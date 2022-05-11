@@ -110,18 +110,18 @@ public class Main {
 //            toDoItemService.complete(5);
 //            toDoItemService.getAll().forEach(item::print);
 
-            to_do_list tdL = new to_do_list("to do list");
-            tdL.addToList(new to_do_item("run 10km in under 55mins"));
-            tdL.addToList(new to_do_item("run 5km in under 20mins", true));
-            toDoListCsvService toDoListService = new toDoListCsvService();
-            toDoListService.add(tdL);
-            toDoListService.add(new to_do_list("another to do list"));
-            toDoListService.getById(0).addToList(new to_do_item("do 10 chin-ups"));
-            ((to_do_item) toDoListService.getById(0).getItem(0)).complete();
-            toDoListService.getAll().forEach(list::print);
-            toDoListService.updateName(0, "TO DO LIST");
-            toDoListService.getAll().forEach(list::print);
-
+//            to_do_list tdL = new to_do_list("to do list");
+//            tdL.addToList(new to_do_item("run 10km in under 55mins"));
+//            tdL.addToList(new to_do_item("run 5km in under 20mins", true));
+//            toDoListCsvService toDoListService = new toDoListCsvService();
+//            toDoListService.add(tdL);
+//            toDoListService.add(new to_do_list("another to do list"));
+//            toDoListService.getById(0).addToList(new to_do_item("do 10 chin-ups"));
+//            ((to_do_item) toDoListService.getById(0).getItem(0)).complete();
+////            toDoListService.getAll().forEach(list::print);
+//            toDoListService.updateName(0, "TO DO LIST");
+////            toDoListService.getAll().forEach(list::print);
+//
             shoppingListCsvService shoppingListService = new shoppingListCsvService();
             shopping_item shopItem = new shopping_item("tomato", 2, 5.3);
             shopping_list shopList = new shopping_list("monday shopping list", 105.5);
@@ -129,8 +129,28 @@ public class Main {
             shopList.addToList(new shopping_item("potato", 10, 2.1));
             shopList.addToList(new shopping_item("apple", 4, 3.1));
             shoppingListService.add(shopList);
+//            shoppingListService.getAll().forEach(list::print);
+            shoppingListService.add(new shopping_list("tuesday shopping list", 200.3));
+//            shoppingListService.getAll().forEach(list::print);
+//            shoppingListService.delete(shoppingListService.getById(0));
+            shoppingListService.addItem(1, new shopping_item("flower", 33, 0.1));
+            shoppingListService.addItem(0, new shopping_item("carrot", 12, 0.31));
             shoppingListService.getAll().forEach(list::print);
 
+            toDoListCsvService toDoListService = new toDoListCsvService();
+            to_do_list tdL = new to_do_list("to do list");
+            tdL.addToList(new to_do_item("run 10km in under 55mins"));
+            tdL.addToList(new to_do_item("run 5km in under 20mins", true));
+            toDoListService.add(tdL);
+            toDoListService.addItem(2, new to_do_item("do 50 sit-up"));
+            shoppingListService.updateMaxPrice(1, 321.69);
+            toDoListService.completeItemFromList(2, 7);
+            shoppingListService.updateQuantityOfItemFromList(0, 0, 6);
+
+            shoppingItemCsvService shopItemService = new shoppingItemCsvService();
+            toDoItemCsvService toDoItemService = new toDoItemCsvService();
+            shopItemService.add(new shopping_item("mar", 2, 1.2));
+            toDoItemService.add(new to_do_item("100kg deadlift", true));
 
         } catch (Exception e) {
                 System.out.println(e.getMessage());

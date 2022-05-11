@@ -1,6 +1,8 @@
 package com.company;
 
 import java.io.*;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -37,7 +39,7 @@ public class toDoListCsvService implements listService{
                 bufferedWriter.write("\n");
             }
             bufferedWriter.close();
-
+            auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
@@ -65,7 +67,7 @@ public class toDoListCsvService implements listService{
         try {
             FileReader fileReader = new FileReader(this.toDoListFile);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-
+            auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
             return bufferedReader.lines()
                     .map(line -> getToDoListFromCsvLine(line))
                     .collect(Collectors.toList());
@@ -90,11 +92,20 @@ public class toDoListCsvService implements listService{
                 bufferedWriter.write(formatForCsv(toDoLists));
                 bufferedWriter.write("\n");
             }
-
+            auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
             bufferedWriter.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public void completeItemFromList(int idList, int idItem) {
+        to_do_list updatedToDoList = ((to_do_list) getById(idList));
+        ((to_do_item) updatedToDoList.getItem(idItem)).complete();
+        updatedToDoList.updateAttributes();
+        delete(getById(idList));
+        add(updatedToDoList);
+        auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
 
     }
 
@@ -146,7 +157,7 @@ public class toDoListCsvService implements listService{
         stringBuilder.append(",");
         stringBuilder.append(List.getAddDate());
         stringBuilder.append(",");
-        stringBuilder.append(((to_do_list) List).getPercentageComplete());
+        stringBuilder.append(new DecimalFormat("#.00", new DecimalFormatSymbols(Locale.US)).format(((to_do_list) List).getPercentageComplete()));
         stringBuilder.append(",");
         stringBuilder.append(List.getList());
 

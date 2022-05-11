@@ -37,6 +37,7 @@ public class toDoItemCsvService implements itemService{
                 bufferedWriter.write("\n");
             }
             bufferedWriter.close();
+            auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -65,6 +66,7 @@ public class toDoItemCsvService implements itemService{
         try {
             FileReader fileReader = new FileReader(this.toDoItemFile);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
+            auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
 
             return bufferedReader.lines()
                     .map(line -> getToDoItemFromCsvLine(line))
@@ -90,6 +92,7 @@ public class toDoItemCsvService implements itemService{
                 bufferedWriter.write(formatForCsv(toDoItems));
                 bufferedWriter.write("\n");
             }
+            auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
 
             bufferedWriter.close();
         } catch (IOException e) {
@@ -102,6 +105,8 @@ public class toDoItemCsvService implements itemService{
         ((to_do_item) itemToUpdate).complete();
         delete(getById(id));
         add(itemToUpdate);
+        auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
+
     }
 
     private item getToDoItemFromCsvLine(String line) {

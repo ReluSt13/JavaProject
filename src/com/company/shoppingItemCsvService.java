@@ -37,6 +37,7 @@ public class shoppingItemCsvService implements itemService{
                 bufferedWriter.write("\n");
             }
             bufferedWriter.close();
+            auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -65,6 +66,7 @@ public class shoppingItemCsvService implements itemService{
         try {
             FileReader fileReader = new FileReader(this.shoppingItemFile);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
+            auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
 
             return bufferedReader.lines()
                     .map(line -> getShoppingItemFromCsvLine(line))
@@ -89,6 +91,7 @@ public class shoppingItemCsvService implements itemService{
                 bufferedWriter.write(formatForCsv(shopItems));
                 bufferedWriter.write("\n");
             }
+            auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
 
             bufferedWriter.close();
         } catch (IOException e) {
@@ -102,6 +105,8 @@ public class shoppingItemCsvService implements itemService{
         ((shopping_item) itemToUpdate).updatePrice(newPrice);
         delete(getById(id));
         add(itemToUpdate);
+        auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
+
     }
 
     public void updateQuantity(int id, int newQuantity) {
@@ -109,6 +114,8 @@ public class shoppingItemCsvService implements itemService{
         ((shopping_item) itemToUpdate).updateQuantity(newQuantity);
         delete(getById(id));
         add(itemToUpdate);
+        auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
+
     }
 
     private item getShoppingItemFromCsvLine(String line) {

@@ -1,10 +1,8 @@
 package com.company;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.text.DecimalFormatSymbols;
+import java.util.*;
 
 public class shopping_list extends list{
     private double maxPrice;
@@ -57,8 +55,8 @@ public class shopping_list extends list{
     @Override
     public void print() {
         this.updateAttributes();
-        System.out.println("Maximum Price: $" + new DecimalFormat("#.00").format(this.maxPrice));
-        System.out.println("Actual Price: $" + new DecimalFormat("#.00").format(this.actualPrice));
+        System.out.println("Maximum Price: $" + new DecimalFormat("#.00", new DecimalFormatSymbols(Locale.US)).format(this.maxPrice));
+        System.out.println("Actual Price: $" + new DecimalFormat("#.00", new DecimalFormatSymbols(Locale.US)).format(this.actualPrice));
         super.print();
     }
     @Override

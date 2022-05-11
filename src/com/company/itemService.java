@@ -14,6 +14,7 @@ public interface itemService {
         Optional<item> ItemOptional = getAll().stream()
                 .filter(item -> item.getId() == id)
                 .findFirst();
+        auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
 
         return ItemOptional.orElse(null);
     }
@@ -21,6 +22,8 @@ public interface itemService {
     List<item> getAll();
 
     default List<item> getItemsBetweenDates(Date d1, Date d2) {
+        auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
+
         return getAll().stream()
                 .filter(Item -> Item.getAddDate().after(d1) && Item.getAddDate().before(d2))
                 .collect(Collectors.toList());
@@ -29,6 +32,8 @@ public interface itemService {
     void delete(item itemToDelete);
 
     default List<item> getByCustomFilter(Predicate<item> filter) {
+        auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
+
         return getAll().stream()
                 .filter(filter)
                 .collect(Collectors.toList());
@@ -39,5 +44,7 @@ public interface itemService {
         itemToUpdate.updateContent(newContent);
         delete(getById(id));
         add(itemToUpdate);
+        auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
+
     }
 }
