@@ -165,11 +165,11 @@ public class Main {
             sl.addToList(new ShoppingItem("item4", 1, 0.13));
             sl.addToList(new ShoppingItem("item5", 7, 12.13));
             sl.addToList(new ShoppingItem("item6", 6, 3.13));
-            System.out.println("##################################################################################");
+            System.out.println("#################################################################################");
             sl.print();
             sl.printSortedSet();
             sl.deleteLastItem();
-            System.out.println("##################################################################################");
+            System.out.println("#################################################################################");
             sl.print();
             sl.printSortedSet();
             shoppingListService.add(sl);
