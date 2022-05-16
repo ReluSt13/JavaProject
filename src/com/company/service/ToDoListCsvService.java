@@ -1,4 +1,9 @@
-package com.company;
+package com.company.service;
+
+import com.company.model.Catalogue;
+import com.company.model.Item;
+import com.company.model.ToDoItem;
+import com.company.model.ToDoList;
 
 import java.io.*;
 import java.text.DecimalFormat;
@@ -8,11 +13,11 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class toDoListCsvService implements listService{
+public class ToDoListCsvService implements ListService {
 
     private final File toDoListFile;
 
-    public toDoListCsvService() {
+    public ToDoListCsvService() {
         this.toDoListFile = new File("src/resources/toDoListFile.csv");
         if(!this.toDoListFile.exists()) {
             try{
@@ -24,7 +29,7 @@ public class toDoListCsvService implements listService{
     }
 
     @Override
-    public void add(list listToAdd) {
+    public void add(Catalogue listToAdd) {
 
         FileWriter fileWriter = null;
         BufferedWriter bufferedWriter = null;
@@ -39,7 +44,7 @@ public class toDoListCsvService implements listService{
                 bufferedWriter.write("\n");
             }
             bufferedWriter.close();
-            auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
+            AuditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
@@ -63,11 +68,11 @@ public class toDoListCsvService implements listService{
     }
 
     @Override
-    public List<list> getAll() {
+    public List<Catalogue> getAll() {
         try {
             FileReader fileReader = new FileReader(this.toDoListFile);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-            auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
+            AuditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
             return bufferedReader.lines()
                     .map(line -> getToDoListFromCsvLine(line))
                     .collect(Collectors.toList());
@@ -79,20 +84,20 @@ public class toDoListCsvService implements listService{
     }
 
     @Override
-    public void delete(list ListToDelete) {
+    public void delete(Catalogue ListToDelete) {
 
-        List<list> remainingLists = getAll().stream()
+        List<Catalogue> remainingLists = getAll().stream()
                 .filter(storedList -> storedList.getId() != ListToDelete.getId())
                 .collect(Collectors.toList());
 
         try(FileWriter fileWriter = new FileWriter(this.toDoListFile, false)) {
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
-            for(list toDoLists : remainingLists) {
+            for(Catalogue toDoLists : remainingLists) {
                 bufferedWriter.write(formatForCsv(toDoLists));
                 bufferedWriter.write("\n");
             }
-            auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
+            AuditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
             bufferedWriter.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -100,19 +105,19 @@ public class toDoListCsvService implements listService{
     }
 
     public void completeItemFromList(int idList, int idItem) {
-        to_do_list updatedToDoList = ((to_do_list) getById(idList));
-        ((to_do_item) updatedToDoList.getItem(idItem)).complete();
+        ToDoList updatedToDoList = ((ToDoList) getById(idList));
+        ((ToDoItem) updatedToDoList.getItem(idItem)).complete();
         updatedToDoList.updateAttributes();
         delete(getById(idList));
         add(updatedToDoList);
-        auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
+        AuditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
 
     }
 
-    private list getToDoListFromCsvLine(String line) {
+    private Catalogue getToDoListFromCsvLine(String line) {
         try {
             String[] values = line.split(",");
-            List<item> deserializedList = new ArrayList<>();
+            List<Item> deserializedList = new ArrayList<>();
             int i = 0;
             for (int j = 0; j < Integer.parseInt(values[2]); j++){
                 int id = Integer.parseInt(values[5 + i].substring(15));
@@ -130,9 +135,9 @@ public class toDoListCsvService implements listService{
 //                System.out.println(addDate);
 //                System.out.println(updateDate);
 //                System.out.println(complete);
-                deserializedList.add(new to_do_item(id, content, addDate, updateDate, complete));
+                deserializedList.add(new ToDoItem(id, content, addDate, updateDate, complete));
             }
-            return new to_do_list(
+            return new ToDoList(
                     Integer.parseInt(values[0]),
                     values[1],
                     Integer.parseInt(values[2]),
@@ -147,7 +152,7 @@ public class toDoListCsvService implements listService{
         return null;
     }
 
-    private String formatForCsv(list List) {
+    private String formatForCsv(Catalogue List) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(List.getId());
         stringBuilder.append(",");
@@ -157,7 +162,7 @@ public class toDoListCsvService implements listService{
         stringBuilder.append(",");
         stringBuilder.append(List.getAddDate());
         stringBuilder.append(",");
-        stringBuilder.append(new DecimalFormat("#.00", new DecimalFormatSymbols(Locale.US)).format(((to_do_list) List).getPercentageComplete()));
+        stringBuilder.append(new DecimalFormat("#.00", new DecimalFormatSymbols(Locale.US)).format(((ToDoList) List).getPercentageComplete()));
         stringBuilder.append(",");
         stringBuilder.append(List.getList());
 

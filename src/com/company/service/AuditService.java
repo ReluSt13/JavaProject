@@ -1,4 +1,4 @@
-package com.company;
+package com.company.service;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -6,12 +6,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 
-public class auditService {
+public class AuditService {
 
     private static File auditServiceFile;
-    private static auditService instance;
+    private static AuditService instance;
 
-    private auditService() {
+    private AuditService() {
         auditServiceFile = new File("src/resources/auditServiceFile.csv");
         if(!auditServiceFile.exists()) {
             try{
@@ -22,9 +22,9 @@ public class auditService {
         }
     }
 
-    public static auditService getInstance(){
+    public static AuditService getInstance(){
         if (auditServiceFile == null) {
-            instance = new auditService();
+            instance = new AuditService();
         }
         return instance;
     }
@@ -33,7 +33,7 @@ public class auditService {
 //        System.out.println(className + " " + methodName + " " + new Date());
 //    }
 
-    public static void print(String className, String methodName) {
+    public void print(String className, String methodName) {
         FileWriter fileWriter = null;
         BufferedWriter bufferedWriter = null;
         try {
@@ -67,7 +67,7 @@ public class auditService {
         }
     }
 
-    private static String formatForCsv(String className, String methodName) {
+    private String formatForCsv(String className, String methodName) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(className);
         stringBuilder.append(",");

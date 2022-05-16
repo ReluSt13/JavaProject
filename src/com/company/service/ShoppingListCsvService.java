@@ -1,4 +1,9 @@
-package com.company;
+package com.company.service;
+
+import com.company.model.Catalogue;
+import com.company.model.Item;
+import com.company.model.ShoppingItem;
+import com.company.model.ShoppingList;
 
 import java.io.*;
 import java.text.DecimalFormat;
@@ -8,11 +13,11 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class shoppingListCsvService implements listService{
+public class ShoppingListCsvService implements ListService {
 
     private final File shoppingListFile;
 
-    public shoppingListCsvService() {
+    public ShoppingListCsvService() {
         this.shoppingListFile = new File("src/resources/shoppingListFile.csv");
         if(!this.shoppingListFile.exists()) {
             try{
@@ -24,7 +29,7 @@ public class shoppingListCsvService implements listService{
     }
 
     @Override
-    public void add(list listToAdd) {
+    public void add(Catalogue listToAdd) {
         FileWriter fileWriter = null;
         BufferedWriter bufferedWriter = null;
         try {
@@ -34,7 +39,7 @@ public class shoppingListCsvService implements listService{
                     .anyMatch(storedList -> storedList.getId() == listToAdd.getId()
                     );
             if (!shoppingListAlreadyExists) {
-                auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
+                AuditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
                 bufferedWriter.write(formatForCsv(listToAdd));
                 bufferedWriter.write("\n");
             }
@@ -63,11 +68,11 @@ public class shoppingListCsvService implements listService{
     }
 
     @Override
-    public List<list> getAll() {
+    public List<Catalogue> getAll() {
         try {
             FileReader fileReader = new FileReader(this.shoppingListFile);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-            auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
+            AuditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
             return bufferedReader.lines()
                     .map(line -> getToDoListFromCsvLine(line))
                     .collect(Collectors.toList());
@@ -79,19 +84,19 @@ public class shoppingListCsvService implements listService{
     }
 
     @Override
-    public void delete(list ListToDelete) {
-        List<list> remainingLists = getAll().stream()
+    public void delete(Catalogue ListToDelete) {
+        List<Catalogue> remainingLists = getAll().stream()
                 .filter(storedList -> storedList.getId() != ListToDelete.getId())
                 .collect(Collectors.toList());
 
         try(FileWriter fileWriter = new FileWriter(this.shoppingListFile, false)) {
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
-            for(list shoppingLists : remainingLists) {
+            for(Catalogue shoppingLists : remainingLists) {
                 bufferedWriter.write(formatForCsv(shoppingLists));
                 bufferedWriter.write("\n");
             }
-            auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
+            AuditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
             bufferedWriter.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -99,38 +104,38 @@ public class shoppingListCsvService implements listService{
     }
 
     public void updateMaxPrice(int id, double newMaxPrice) {
-        shopping_list updatedShoppingList = ((shopping_list) getById(id));
+        ShoppingList updatedShoppingList = ((ShoppingList) getById(id));
         updatedShoppingList.updateMaxPrice(newMaxPrice);
         delete(getById(id));
         add(updatedShoppingList);
-        auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
+        AuditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
 
     }
 
     public void updatePriceOfItemFromList(int idList, int idItem, double newPrice){
-        shopping_list updatedShopList = ((shopping_list) getById(idList));
-        ((shopping_item) updatedShopList.getItem(idItem)).updatePrice(newPrice);
+        ShoppingList updatedShopList = ((ShoppingList) getById(idList));
+        ((ShoppingItem) updatedShopList.getItem(idItem)).updatePrice(newPrice);
         updatedShopList.updateAttributes();
         delete(getById(idList));
         add(updatedShopList);
-        auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
+        AuditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
 
     }
 
     public void updateQuantityOfItemFromList(int idList, int idItem, int newQuantity){
-        shopping_list updatedShopList = ((shopping_list) getById(idList));
-        ((shopping_item) updatedShopList.getItem(idItem)).updateQuantity(newQuantity);
+        ShoppingList updatedShopList = ((ShoppingList) getById(idList));
+        ((ShoppingItem) updatedShopList.getItem(idItem)).updateQuantity(newQuantity);
         updatedShopList.updateAttributes();
         delete(getById(idList));
         add(updatedShopList);
-        auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
+        AuditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
 
     }
 
-    private list getToDoListFromCsvLine(String line) {
+    private Catalogue getToDoListFromCsvLine(String line) {
         try {
             String[] values = line.split(",");
-            List<item> deserializedList = new ArrayList<>();
+            List<Item> deserializedList = new ArrayList<>();
             int i = 0;
             for (int j = 0; j < Integer.parseInt(values[2]); j++){
                 int id = Integer.parseInt(values[6 + i].substring(18));
@@ -151,9 +156,9 @@ public class shoppingListCsvService implements listService{
 //                System.out.println(updateDate);
 //                System.out.println(quantity);
 //                System.out.println(price);
-                deserializedList.add(new shopping_item(id, content, addDate, updateDate, quantity, price));
+                deserializedList.add(new ShoppingItem(id, content, addDate, updateDate, quantity, price));
             }
-            return new shopping_list(
+            return new ShoppingList(
                     Integer.parseInt(values[0]),
                     values[1],
                     Integer.parseInt(values[2]),
@@ -169,7 +174,7 @@ public class shoppingListCsvService implements listService{
         return null;
     }
 
-    private String formatForCsv(list List) {
+    private String formatForCsv(Catalogue List) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(List.getId());
         stringBuilder.append(",");
@@ -179,9 +184,9 @@ public class shoppingListCsvService implements listService{
         stringBuilder.append(",");
         stringBuilder.append(List.getAddDate());
         stringBuilder.append(",");
-        stringBuilder.append(new DecimalFormat("#.00", new DecimalFormatSymbols(Locale.US)).format(((shopping_list) List).getActualPrice()));
+        stringBuilder.append(new DecimalFormat("#.00", new DecimalFormatSymbols(Locale.US)).format(((ShoppingList) List).getActualPrice()));
         stringBuilder.append(",");
-        stringBuilder.append(new DecimalFormat("#.00", new DecimalFormatSymbols(Locale.US)).format(((shopping_list) List).getMaxPrice()));
+        stringBuilder.append(new DecimalFormat("#.00", new DecimalFormatSymbols(Locale.US)).format(((ShoppingList) List).getMaxPrice()));
         stringBuilder.append(",");
         stringBuilder.append(List.getList());
 

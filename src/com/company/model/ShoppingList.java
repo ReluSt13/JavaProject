@@ -1,31 +1,33 @@
-package com.company;
+package com.company.model;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class shopping_list extends list{
+public class ShoppingList extends Catalogue {
     private double maxPrice;
     private double actualPrice;
     private double uniqueActualPrice;
-    private List<item> sortedList = new ArrayList<>();
+//    private List<Item> sortedList = new ArrayList<>();
+    private Set<ShoppingItem> sortedSet = new TreeSet<>(((o1, o2) -> (int) (o1.getTotalPrice() - o2.getTotalPrice())));
     private void updateActualPrice() {
         this.actualPrice = 0;
         this.uniqueActualPrice = 0;
-        this.getList().forEach(shopItem -> this.actualPrice += ((shopping_item) shopItem).getTotalPrice());
-        this.getUniqueList().forEach(shopItem -> this.uniqueActualPrice += ((shopping_item) shopItem).getTotalPrice());
+        this.getList().forEach(shopItem -> this.actualPrice += ((ShoppingItem) shopItem).getTotalPrice());
+        this.sortedSet.forEach(shopItem -> this.uniqueActualPrice += shopItem.getTotalPrice());
 
     }
 
 
-    public shopping_list(String listName, double maxPrice) {
+    public ShoppingList(String listName, double maxPrice) {
         super(listName);
         this.maxPrice = maxPrice;
         this.actualPrice = 0;
         this.uniqueActualPrice = 0;
     }
 
-    public shopping_list(int id, String listName, int nrOfItems, Date addDate, double actualPrice, double maxPrice, List<item> list) {
+    public ShoppingList(int id, String listName, int nrOfItems, Date addDate, double actualPrice, double maxPrice, List<Item> list) {
         super(id, listName, nrOfItems, addDate, list);
         this.maxPrice = maxPrice;
         this.actualPrice = actualPrice;
@@ -35,19 +37,18 @@ public class shopping_list extends list{
         this.maxPrice = newMaxPrice;
     }
 
-    public void printSorted() {
+    public void printSortedSet() {
         this.updateAttributes();
         System.out.println("Maximum Price: $" + new DecimalFormat("#.00").format(this.maxPrice));
-        System.out.println("Actual Price: $" + new DecimalFormat("#.00").format(this.actualPrice));
-        System.out.println("List ID: " + this.getId() + "\nList name: " + this.getListName() + "\nCreate date: " + this.getAddDate() + "\nNr. of items: " + this.getNrOfItems());
-        if(this.getNrOfItems() == 0) System.out.println("The list is empty :(");
+        System.out.println("Actual Price: $" + new DecimalFormat("#.00").format(this.uniqueActualPrice));
+        System.out.println("List ID: " + this.getId() + "\nList name: " + this.getListName() + "\nCreate date: " + this.getAddDate() + "\nNr. of items: " + this.sortedSet.size());
+        if(this.sortedSet.size() == 0) System.out.println("The sorted set is empty :(");
         else {
-            int index = 0;
-            for (item item :
-                    this.sortedList) {
-                System.out.println("------ Item nr." + (++index) + " ------");
-                item.print();
-            }
+            AtomicInteger index = new AtomicInteger();
+            this.sortedSet.forEach(shopItem -> {
+                System.out.println("------ Item nr." + (index.incrementAndGet()) + " ------");
+                shopItem.print();
+            });
         }
         System.out.println("---------------------------------------------------------------");
     }
@@ -74,24 +75,27 @@ public class shopping_list extends list{
     }
 
     @Override
-    public void addToList(item itemToBeAdded) {
+    public void addToList(Item itemToBeAdded) {
         this.updateAttributes();
-        if(((shopping_item) itemToBeAdded).getTotalPrice() + this.actualPrice > this.maxPrice) throw new IllegalArgumentException("Nu poti depasi pretul maxim");
+        if(((ShoppingItem) itemToBeAdded).getTotalPrice() + this.actualPrice > this.maxPrice) throw new IllegalArgumentException("Nu poti depasi pretul maxim");
+        this.sortedSet.add(((ShoppingItem) itemToBeAdded));
         super.addToList(itemToBeAdded);
-        this.sortedList.add(itemToBeAdded);
-        sortedList.sort((item1, item2) -> (int) (((shopping_item) item1).getTotalPrice() - ((shopping_item) item2).getTotalPrice()));
+//        this.sortedList.add(itemToBeAdded);
+//        sortedList.sort((item1, item2) -> (int) (((ShoppingItem) item1).getTotalPrice() - ((ShoppingItem) item2).getTotalPrice()));
     }
     @Override
     public void deleteLastItem() {
+        ShoppingItem lastItem = (ShoppingItem) this.getList().get(this.getNrOfItems() - 1);
         super.deleteLastItem();
-        this.sortedList.remove(this.getNrOfItems() - 1);
+        this.sortedSet.remove(lastItem);
+//        this.sortedList.remove(this.getNrOfItems() - 1);
         this.updateAttributes();
     }
     @Override
     public void deleteItemById(int id) {
         super.deleteItemById(id);
         if(id < 0) throw new IllegalArgumentException("ID-ul nu poate fi negativ");
-        this.sortedList.removeIf(item -> item.getId() == id);
+        this.sortedSet.removeIf(item -> item.getId() == id);
         this.updateAttributes();
     }
 
@@ -101,5 +105,9 @@ public class shopping_list extends list{
 
     public double getActualPrice() {
         return actualPrice;
+    }
+
+    public double getUniqueActualPrice() {
+        return uniqueActualPrice;
     }
 }

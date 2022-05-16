@@ -1,26 +1,25 @@
-package com.company;
+package com.company.model;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.util.Date;
 
-public class shopping_item extends item{
+public class ShoppingItem extends Item {
     private int quantity;
     private double price;
 
-    public shopping_item(int id, String content, Date addDate, Date updateDate, int quantity, double price) {
+    public ShoppingItem(int id, String content, Date addDate, Date updateDate, int quantity, double price) {
         super(id, content, addDate, updateDate);
         this.quantity = quantity;
         this.price = price;
     }
 
-    public shopping_item(String content, int quantity, double price) {
+    public ShoppingItem(String content, int quantity, double price) {
         super(content);
         this.quantity = quantity;
         this.price = price;
     }
 
-    public shopping_item(String content) {
+    public ShoppingItem(String content) {
         super(content);
         this.quantity = 0;
         this.price = 0;

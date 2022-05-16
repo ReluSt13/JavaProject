@@ -1,21 +1,21 @@
-package com.company;
+package com.company.model;
 
 import java.util.Date;
 
-public class to_do_item extends item {
+public class ToDoItem extends Item {
     private boolean isCompleted;
 
-    public to_do_item(String content, boolean isCompleted) {
+    public ToDoItem(String content, boolean isCompleted) {
         super(content);
         this.isCompleted = isCompleted;
     }
 
-    public to_do_item(String content) {
+    public ToDoItem(String content) {
         super(content);
         this.isCompleted = false;
     }
 
-    public to_do_item(int id, String content, Date addDate, Date updateDate, boolean isCompleted) {
+    public ToDoItem(int id, String content, Date addDate, Date updateDate, boolean isCompleted) {
         super(id, content, addDate, updateDate);
         this.isCompleted = isCompleted;
     }

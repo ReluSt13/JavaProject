@@ -1,22 +1,22 @@
-package com.company;
+package com.company.model;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class notebook {
+public class Notebook {
 
-    private List<list> notebook = new ArrayList<>();
+    private List<Catalogue> notebook = new ArrayList<>();
     private int nrOfLists;
-    private static notebook instance;
-    private notebook() {}
+    private static Notebook instance;
+    private Notebook() {}
 
-    public static notebook getInstance() {
-        if (instance == null) instance = new notebook();
+    public static Notebook getInstance() {
+        if (instance == null) instance = new Notebook();
         return instance;
     }
 
-    public void addList(list listToBeAdded) {
+    public void addList(Catalogue listToBeAdded) {
         this.notebook.add(listToBeAdded);
         this.nrOfLists = this.notebook.size();
     }
@@ -30,7 +30,7 @@ public class notebook {
         });
     }
 
-    public list getListById(int id) {
+    public Catalogue getListById(int id) {
         return this.notebook.stream()
                 .filter(list -> list.getId() == id)
                 .findAny()

@@ -1,25 +1,25 @@
-package com.company;
+package com.company.model;
 
 import java.util.*;
 
-public class list {
+public class Catalogue {
     private int id;
     private static int id_max = 0;
     private int nrOfItems;
     private int nrOfUniqueItems;
     private Date addDate;
     private String listName;
-    private List<item> list = new ArrayList<>();
-    private Set<item> uniqueList = new HashSet<>();
+    private List<Item> list = new ArrayList<>();
+    private Set<Item> uniqueList = new HashSet<>();
 
-    public list(String listName) {
+    public Catalogue(String listName) {
         this.id = id_max++;
         this.nrOfItems = 0;
         this.listName = listName;
         this.addDate = new Date();
     }
 
-    public list(int id, String listName, int nrOfItems, Date addDate, List<item> list) {
+    public Catalogue(int id, String listName, int nrOfItems, Date addDate, List<Item> list) {
         this.id = id;
         this.listName = listName;
         this.nrOfItems = nrOfItems;
@@ -27,7 +27,7 @@ public class list {
         this.list = list;
     }
 
-    public void addToList(item itemToBeAdded) {
+    public void addToList(Item itemToBeAdded) {
         this.list.add(itemToBeAdded);
         this.uniqueList.add(itemToBeAdded);
         this.updateAttributes();
@@ -38,7 +38,7 @@ public class list {
         if(this.getNrOfItems() == 0) System.out.println("The list is empty :(");
         else {
             int index = 0;
-            for (item item :
+            for (Item item :
                     this.list) {
                 System.out.println("------ Item nr." + (++index) + " ------");
                 item.print();
@@ -50,7 +50,7 @@ public class list {
     public void printUnique() {
         System.out.println("List ID:" + id + "\nList name: " + listName + "\nCreate date: " + this.addDate + "\nNr. of unique items: " + this.nrOfUniqueItems);
         int index = 0;
-        for (item item :
+        for (Item item :
                 this.uniqueList) {
             System.out.println("------ Item nr." + (++index) + " ------");
             item.print();
@@ -61,7 +61,7 @@ public class list {
     public void deleteLastItem() {
         if (this.getNrOfItems() > 0) {
             this.list.remove(this.getNrOfItems() - 1);
-            List<item> unique = new ArrayList<>(uniqueList);
+            java.util.List<Item> unique = new ArrayList<>(uniqueList);
             this.uniqueList.remove(unique.get(unique.size() - 1));
             this.updateAttributes();
         }
@@ -79,7 +79,7 @@ public class list {
         this.nrOfUniqueItems = this.uniqueList.size();
     }
 
-    public item getItem(int id) {
+    public Item getItem(int id) {
         return this.list.stream()
                 .filter(item -> item.getId() == id)
                 .findAny()
@@ -106,13 +106,15 @@ public class list {
         return addDate;
     }
 
-    public List<item> getList() {
+    public List<Item> getList() {
         return list;
     }
 
-    public Set<item> getUniqueList() {
+    public Set<Item> getUniqueList() {
         return uniqueList;
     }
 
-
+    public int getNrOfUniqueItems() {
+        return nrOfUniqueItems;
+    }
 }

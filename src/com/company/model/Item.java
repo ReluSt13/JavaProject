@@ -1,31 +1,30 @@
-package com.company;
+package com.company.model;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+//import java.time.LocalDate;
 
-public class item {
+public class Item {
     private int id;
     private static int id_max = 0;
     private String content;
     private Date addDate;
     private Date updateDate;
 
-    public item(int id, String content, Date addDate, Date updateDate) {
+    public Item(int id, String content, Date addDate, Date updateDate) {
         this.id = id;
         this.content = content;
         this.addDate = addDate;
         this.updateDate = updateDate;
     }
 
-    public item(String content, Date addDate, Date updateDate) {
+    public Item(String content, Date addDate, Date updateDate) {
         this.id = id_max++;
         this.content = content;
         this.addDate = addDate;
         this.updateDate = updateDate;
     }
 
-    public item(String content){
+    public Item(String content){
         this(content, new Date(), null);
     }
 

@@ -1,21 +1,23 @@
-package com.company;
+package com.company.service;
+
+import com.company.model.Item;
+import com.company.model.ShoppingItem;
 
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class toDoItemCsvService implements itemService{
+public class ShoppingItemCsvService implements ItemService {
 
-    private final File toDoItemFile;
+    private final File shoppingItemFile;
 
-    public toDoItemCsvService() {
-        this.toDoItemFile = new File("src/resources/toDoItemFile.csv");
-        if(!this.toDoItemFile.exists()) {
+    public ShoppingItemCsvService() {
+        this.shoppingItemFile = new File("src/resources/shoppingItemFile.csv");
+        if(!this.shoppingItemFile.exists()) {
             try{
-                this.toDoItemFile.createNewFile();
+                this.shoppingItemFile.createNewFile();
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
@@ -23,21 +25,21 @@ public class toDoItemCsvService implements itemService{
     }
 
     @Override
-    public void add(item itemToAdd) {
+    public void add(Item itemToAdd) {
         FileWriter fileWriter = null;
         BufferedWriter bufferedWriter = null;
         try {
-            fileWriter = new FileWriter(this.toDoItemFile, true);
+            fileWriter = new FileWriter(this.shoppingItemFile, true);
             bufferedWriter = new BufferedWriter(fileWriter);
-            boolean toDoItemAlreadyExists = getAll().stream()
+            boolean shoppingItemAlreadyExists = getAll().stream()
                     .anyMatch(storedItem -> storedItem.getId() == itemToAdd.getId()
                     );
-            if (!toDoItemAlreadyExists) {
+            if (!shoppingItemAlreadyExists) {
                 bufferedWriter.write(formatForCsv(itemToAdd));
                 bufferedWriter.write("\n");
             }
             bufferedWriter.close();
-            auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
+            AuditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -62,14 +64,14 @@ public class toDoItemCsvService implements itemService{
     }
 
     @Override
-    public List<item> getAll() {
+    public List<Item> getAll() {
         try {
-            FileReader fileReader = new FileReader(this.toDoItemFile);
+            FileReader fileReader = new FileReader(this.shoppingItemFile);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-            auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
+            AuditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
 
             return bufferedReader.lines()
-                    .map(line -> getToDoItemFromCsvLine(line))
+                    .map(line -> getShoppingItemFromCsvLine(line))
                     .collect(Collectors.toList());
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -79,52 +81,62 @@ public class toDoItemCsvService implements itemService{
     }
 
     @Override
-    public void delete(item itemToDelete) {
-
-        List<item> remainingItems = getAll().stream()
+    public void delete(Item itemToDelete) {
+        List<Item> remainingItems = getAll().stream()
                 .filter(storedItem -> storedItem.getId() != itemToDelete.getId())
                 .collect(Collectors.toList());
 
-        try(FileWriter fileWriter = new FileWriter(this.toDoItemFile, false)) {
+        try(FileWriter fileWriter = new FileWriter(this.shoppingItemFile, false)) {
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
-            for(item toDoItems : remainingItems) {
-                bufferedWriter.write(formatForCsv(toDoItems));
+            for(Item shopItems : remainingItems) {
+                bufferedWriter.write(formatForCsv(shopItems));
                 bufferedWriter.write("\n");
             }
-            auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
+            AuditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
 
             bufferedWriter.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+
     }
 
-    public void complete(int id) {
-        item itemToUpdate = getById(id);
-        ((to_do_item) itemToUpdate).complete();
+    public void updatePrice(int id, double newPrice) {
+        Item itemToUpdate = getById(id);
+        ((ShoppingItem) itemToUpdate).updatePrice(newPrice);
         delete(getById(id));
         add(itemToUpdate);
-        auditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
+        AuditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
 
     }
 
-    private item getToDoItemFromCsvLine(String line) {
+    public void updateQuantity(int id, int newQuantity) {
+        Item itemToUpdate = getById(id);
+        ((ShoppingItem) itemToUpdate).updateQuantity(newQuantity);
+        delete(getById(id));
+        add(itemToUpdate);
+        AuditService.getInstance().print(getClass().getSimpleName(), Thread.currentThread().getStackTrace()[1].getMethodName());
+
+    }
+
+    private Item getShoppingItemFromCsvLine(String line) {
         try {
             String[] values = line.split(",");
-            return new to_do_item(
+            return new ShoppingItem(
                     Integer.parseInt(values[0]),
                     values[1],
                     new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.getDefault()).parse(values[2]),
                     !values[3].equals("null") ? new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.getDefault()).parse(values[3]) : null,
-                    Boolean.parseBoolean(values[4]));
+                    Integer.parseInt(values[4]),
+                    Double.parseDouble(values[5]));
         } catch (ParseException e) {
             System.out.println(e.getMessage());
         }
         return null;
     }
 
-    private String formatForCsv(item item) {
+    private String formatForCsv(Item item) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(item.getId());
         stringBuilder.append(",");
@@ -134,10 +146,11 @@ public class toDoItemCsvService implements itemService{
         stringBuilder.append(",");
         stringBuilder.append(item.getUpdateDate());
         stringBuilder.append(",");
-        stringBuilder.append(((to_do_item) item).isComplete());
+        stringBuilder.append(((ShoppingItem) item).getQuantity());
+        stringBuilder.append(",");
+        stringBuilder.append(((ShoppingItem) item).getPrice());
 
         return stringBuilder.toString();
     }
-
 
 }

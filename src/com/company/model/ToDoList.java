@@ -1,17 +1,17 @@
-package com.company;
+package com.company.model;
 
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 
-public class to_do_list extends list{
+public class ToDoList extends Catalogue {
     private double percentageComplete;
 
     //maybe add nrOfCompletedItems...
     private void updatePercentage() {
         int nrOfItemsCompleted = 0;
-        for (item item : this.getList()) {
-            if (((to_do_item) item).isComplete()) nrOfItemsCompleted++;
+        for (Item item : this.getList()) {
+            if (((ToDoItem) item).isComplete()) nrOfItemsCompleted++;
         }
         if(getNrOfItems() == 0) {
             this.percentageComplete = 0.0;
@@ -20,17 +20,17 @@ public class to_do_list extends list{
         }
     }
 
-    public to_do_list(String listName, double percentageComplete) {
+    public ToDoList(String listName, double percentageComplete) {
         super(listName);
         this.percentageComplete = percentageComplete;
     }
 
-    public to_do_list(String listName) {
+    public ToDoList(String listName) {
         super(listName);
         this.percentageComplete = 0;
     }
 
-    public to_do_list(int id, String listName, int nrOfItems, Date addDate, double percentageComplete,  List<item> list) {
+    public ToDoList(int id, String listName, int nrOfItems, Date addDate, double percentageComplete, List<Item> list) {
         super(id, listName, nrOfItems, addDate, list);
         this.percentageComplete = percentageComplete;
     }
