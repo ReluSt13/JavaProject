@@ -1,10 +1,10 @@
 package com.company;
 
 import com.company.model.*;
-import com.company.service.ShoppingItemCsvService;
-import com.company.service.ShoppingListCsvService;
-import com.company.service.ToDoItemCsvService;
-import com.company.service.ToDoListCsvService;
+import com.company.service.*;
+
+import java.util.Date;
+import java.util.List;
 
 public class Main {
 
@@ -173,6 +173,26 @@ public class Main {
             sl.print();
             sl.printSortedSet();
             shoppingListService.add(sl);
+
+            ShoppingItemDbService shoppingItemDbService = new ShoppingItemDbService();
+//            shoppingItemDbService.add(new ShoppingItem("first shopping item", 10, 4.67));
+//            shoppingItemDbService.add(new ShoppingItem("second shopping item", 5, 1.97));
+//            shoppingItemDbService.add(new ShoppingItem("third shopping item", 3, 14.62));
+
+            List<Item> shopItemsFromDb = shoppingItemDbService.getAll();
+            shopItemsFromDb.forEach(itm -> itm.print());
+            System.out.println("#######################################");
+            shoppingItemDbService.updateContent(17, "updated second shopping item");
+            shoppingItemDbService.getById(17).print();
+//            shoppingItemDbService.delete(shoppingItemDbService.getById(16));
+            shoppingItemDbService.getAll().forEach(item -> item.print());
+//            shoppingItemDbService.add(new ShoppingItem("fourth shopping item", 12, 0.41));
+            System.out.println("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+            shoppingItemDbService.getItemsBetweenDates(new Date(new Date().getTime() - 60 * 60 * 1000), new Date(new Date().getTime() - 20 * 60 * 1000)).forEach(Item::print);
+
+            shoppingItemDbService.updatePrice(16, 42);
+            shoppingItemDbService.updateQuantity(18, 13);
+            shoppingItemDbService.getAll().forEach(item -> item.print());
 
         } catch (Exception e) {
                 System.out.println(e.getMessage());
