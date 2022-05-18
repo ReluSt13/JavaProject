@@ -126,53 +126,53 @@ public class Main {
 //            toDoListService.updateName(0, "TO DO LIST");
 ////            toDoListService.getAll().forEach(list::print);
 //
-            ShoppingListCsvService shoppingListService = new ShoppingListCsvService();
-            ShoppingItem shopItem = new ShoppingItem("tomato", 2, 5.3);
-            ShoppingList shopList = new ShoppingList("monday shopping list", 105.5);
-            shopList.addToList(shopItem);
-            shopList.addToList(new ShoppingItem("potato", 10, 2.1));
-            shopList.addToList(new ShoppingItem("apple", 4, 3.1));
-            shoppingListService.add(shopList);
-//            shoppingListService.getAll().forEach(list::print);
-            shoppingListService.add(new ShoppingList("tuesday shopping list", 200.3));
-//            shoppingListService.getAll().forEach(list::print);
-//            shoppingListService.delete(shoppingListService.getById(0));
-            shoppingListService.addItem(1, new ShoppingItem("flower", 33, 0.1));
-            shoppingListService.addItem(0, new ShoppingItem("carrot", 12, 0.31));
-            shoppingListService.getAll().forEach(Catalogue::print);
-
-            ToDoListCsvService toDoListService = new ToDoListCsvService();
-            ToDoList tdL = new ToDoList("to do list");
-            tdL.addToList(new ToDoItem("run 10km in under 55mins"));
-            tdL.addToList(new ToDoItem("run 5km in under 20mins", true));
-            toDoListService.add(tdL);
-            toDoListService.addItem(2, new ToDoItem("do 50 sit-up"));
-            shoppingListService.updateMaxPrice(1, 321.69);
-            toDoListService.completeItemFromList(2, 7);
-            shoppingListService.updateQuantityOfItemFromList(0, 0, 6);
-
-            ShoppingItemCsvService shopItemService = new ShoppingItemCsvService();
-            ToDoItemCsvService toDoItemService = new ToDoItemCsvService();
-            shopItemService.add(new ShoppingItem("mar", 2, 1.2));
-            toDoItemService.add(new ToDoItem("100kg deadlift", true));
-
-
-
-            ShoppingList sl = new ShoppingList("shoplist test", 2136.7);
-            sl.addToList(new ShoppingItem("item1", 3, 2.1));
-            sl.addToList(new ShoppingItem("item2", 1, 1.2));
-            sl.addToList(new ShoppingItem("ITEM3", 3, 1.23));
-            sl.addToList(new ShoppingItem("item4", 1, 0.13));
-            sl.addToList(new ShoppingItem("item5", 7, 12.13));
-            sl.addToList(new ShoppingItem("item6", 6, 3.13));
-            System.out.println("#################################################################################");
-            sl.print();
-            sl.printSortedSet();
-            sl.deleteLastItem();
-            System.out.println("#################################################################################");
-            sl.print();
-            sl.printSortedSet();
-            shoppingListService.add(sl);
+//            ShoppingListCsvService shoppingListService = new ShoppingListCsvService();
+//            ShoppingItem shopItem = new ShoppingItem("tomato", 2, 5.3);
+//            ShoppingList shopList = new ShoppingList("monday shopping list", 105.5);
+//            shopList.addToList(shopItem);
+//            shopList.addToList(new ShoppingItem("potato", 10, 2.1));
+//            shopList.addToList(new ShoppingItem("apple", 4, 3.1));
+//            shoppingListService.add(shopList);
+////            shoppingListService.getAll().forEach(list::print);
+//            shoppingListService.add(new ShoppingList("tuesday shopping list", 200.3));
+////            shoppingListService.getAll().forEach(list::print);
+////            shoppingListService.delete(shoppingListService.getById(0));
+//            shoppingListService.addItem(1, new ShoppingItem("flower", 33, 0.1));
+//            shoppingListService.addItem(0, new ShoppingItem("carrot", 12, 0.31));
+//            shoppingListService.getAll().forEach(Catalogue::print);
+//
+//            ToDoListCsvService toDoListService = new ToDoListCsvService();
+//            ToDoList tdL = new ToDoList("to do list");
+//            tdL.addToList(new ToDoItem("run 10km in under 55mins"));
+//            tdL.addToList(new ToDoItem("run 5km in under 20mins", true));
+//            toDoListService.add(tdL);
+//            toDoListService.addItem(2, new ToDoItem("do 50 sit-up"));
+//            shoppingListService.updateMaxPrice(1, 321.69);
+//            toDoListService.completeItemFromList(2, 7);
+//            shoppingListService.updateQuantityOfItemFromList(0, 0, 6);
+//
+//            ShoppingItemCsvService shopItemService = new ShoppingItemCsvService();
+//            ToDoItemCsvService toDoItemService = new ToDoItemCsvService();
+//            shopItemService.add(new ShoppingItem("mar", 2, 1.2));
+//            toDoItemService.add(new ToDoItem("100kg deadlift", true));
+//
+//
+//
+//            ShoppingList sl = new ShoppingList("shoplist test", 2136.7);
+//            sl.addToList(new ShoppingItem("item1", 3, 2.1));
+//            sl.addToList(new ShoppingItem("item2", 1, 1.2));
+//            sl.addToList(new ShoppingItem("ITEM3", 3, 1.23));
+//            sl.addToList(new ShoppingItem("item4", 1, 0.13));
+//            sl.addToList(new ShoppingItem("item5", 7, 12.13));
+//            sl.addToList(new ShoppingItem("item6", 6, 3.13));
+//            System.out.println("#################################################################################");
+//            sl.print();
+//            sl.printSortedSet();
+//            sl.deleteLastItem();
+//            System.out.println("#################################################################################");
+//            sl.print();
+//            sl.printSortedSet();
+//            shoppingListService.add(sl);
 
             ShoppingItemDbService shoppingItemDbService = new ShoppingItemDbService();
 //            shoppingItemDbService.add(new ShoppingItem("first shopping item", 10, 4.67));
@@ -180,19 +180,26 @@ public class Main {
 //            shoppingItemDbService.add(new ShoppingItem("third shopping item", 3, 14.62));
 
             List<Item> shopItemsFromDb = shoppingItemDbService.getAll();
-            shopItemsFromDb.forEach(itm -> itm.print());
+//            shopItemsFromDb.forEach(itm -> itm.print());
             System.out.println("#######################################");
-            shoppingItemDbService.updateContent(17, "updated second shopping item");
-            shoppingItemDbService.getById(17).print();
+//            shoppingItemDbService.updateContent(17, "updated second shopping item");
+//            shoppingItemDbService.getById(17).print();
 //            shoppingItemDbService.delete(shoppingItemDbService.getById(16));
-            shoppingItemDbService.getAll().forEach(item -> item.print());
+//            shoppingItemDbService.getAll().forEach(item -> item.print());
 //            shoppingItemDbService.add(new ShoppingItem("fourth shopping item", 12, 0.41));
-            System.out.println("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
-            shoppingItemDbService.getItemsBetweenDates(new Date(new Date().getTime() - 60 * 60 * 1000), new Date(new Date().getTime() - 20 * 60 * 1000)).forEach(Item::print);
+//            System.out.println("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+//            shoppingItemDbService.getItemsBetweenDates(new Date(new Date().getTime() - 60 * 60 * 1000), new Date(new Date().getTime() - 20 * 60 * 1000)).forEach(Item::print);
 
-            shoppingItemDbService.updatePrice(16, 42);
-            shoppingItemDbService.updateQuantity(18, 13);
-            shoppingItemDbService.getAll().forEach(item -> item.print());
+//            shoppingItemDbService.updatePrice(16, 42);
+//            shoppingItemDbService.updateQuantity(18, 13);
+//            shoppingItemDbService.getAll().forEach(item -> item.print());
+
+            ToDoItemDbService toDoItemDbService = new ToDoItemDbService();
+//            toDoItemDbService.add(new ToDoItem("second to do item"));
+//            toDoItemDbService.updateCompleteStatus(3, true);
+            toDoItemDbService.updateContent(0, "updated second to do item");
+//            toDoItemDbService.delete(toDoItemDbService.getById(3));
+            toDoItemDbService.getAll().forEach(Item::print);
 
         } catch (Exception e) {
                 System.out.println(e.getMessage());
