@@ -30,6 +30,11 @@ public class ToDoList extends Catalogue {
         this.percentageComplete = 0;
     }
 
+    public ToDoList(int id, String listName, Date addDate, double percentageComplete) {
+        super(id, listName, addDate);
+        this.percentageComplete = percentageComplete;
+    }
+
     public ToDoList(int id, String listName, int nrOfItems, Date addDate, double percentageComplete, List<Item> list) {
         super(id, listName, nrOfItems, addDate, list);
         this.percentageComplete = percentageComplete;

@@ -6,10 +6,8 @@ import com.company.model.ShoppingItem;
 import com.company.model.ToDoItem;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import java.util.Date;
-import java.util.List;
 import java.util.function.Predicate;
 
 public class ToDoItemDbService implements ItemService{
@@ -22,7 +20,7 @@ public class ToDoItemDbService implements ItemService{
 
     @Override
     public void add(Item itemToAdd) {
-        String query = "insert into todoitem values (?, ?, ?, ?, ?)";
+        String query = "insert into todoitem values (?, ?, ?, ?, ?, null)";
         try(PreparedStatement preparedStatement = connection.prepareStatement(query)){
             preparedStatement.setInt(1, itemToAdd.getId());
             preparedStatement.setString(2, itemToAdd.getContent());
@@ -55,7 +53,11 @@ public class ToDoItemDbService implements ItemService{
                 if(resultSet.getTimestamp(4) != null)
                     updateDate = new Date(resultSet.getTimestamp(4).getTime());
                 boolean isComplete = resultSet.getBoolean(5);
-                toDoItemToReturn = new ToDoItem(Id, content, addDate, updateDate, isComplete);
+                Optional<Integer> listId = Optional.ofNullable(resultSet.getInt(6));
+                if(resultSet.wasNull()) {
+                    listId = Optional.ofNullable(null);
+                }
+                toDoItemToReturn = new ToDoItem(Id, content, addDate, updateDate, isComplete, listId);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -77,7 +79,11 @@ public class ToDoItemDbService implements ItemService{
                 if(resultSet.getTimestamp(4) != null)
                     updateDate = new Date(resultSet.getTimestamp(4).getTime());
                 boolean isComplete = resultSet.getBoolean(5);
-                toDoItems.add(new ToDoItem(id, content, addDate, updateDate, isComplete));
+                Optional<Integer> listId = Optional.ofNullable(resultSet.getInt(6));
+                if(resultSet.wasNull()) {
+                    listId = Optional.ofNullable(null);
+                }
+                toDoItems.add(new ToDoItem(id, content, addDate, updateDate, isComplete, listId));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -101,7 +107,11 @@ public class ToDoItemDbService implements ItemService{
                 if(resultSet.getTimestamp(4) != null)
                     updateDate = new Date(resultSet.getTimestamp(4).getTime());
                 boolean isComplete = resultSet.getBoolean(5);
-                toDoItemsBetweenDates.add(new ToDoItem(id, content, addDate, updateDate, isComplete));
+                Optional<Integer> listId = Optional.ofNullable(resultSet.getInt(6));
+                if(resultSet.wasNull()) {
+                    listId = Optional.ofNullable(null);
+                }
+                toDoItemsBetweenDates.add(new ToDoItem(id, content, addDate, updateDate, isComplete, listId));
             }
         } catch (SQLException e) {
             e.printStackTrace();

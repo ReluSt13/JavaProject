@@ -1,6 +1,7 @@
 package com.company.model;
 
 import java.util.Date;
+import java.util.Optional;
 
 public class ToDoItem extends Item {
     private boolean isCompleted;
@@ -18,6 +19,11 @@ public class ToDoItem extends Item {
     public ToDoItem(int id, String content, Date addDate, Date updateDate, boolean isCompleted) {
         super(id, content, addDate, updateDate);
         this.isCompleted = isCompleted;
+    }
+
+    public ToDoItem(int id, String content, Date addDate, Date updateDate, boolean isComplete, Optional<Integer> listId) {
+        super(id, content, addDate, updateDate, listId);
+        this.isCompleted = isComplete;
     }
 
     @Override
