@@ -2,10 +2,17 @@ package com.company.model;
 
 import java.text.DecimalFormat;
 import java.util.Date;
+import java.util.Optional;
 
 public class ShoppingItem extends Item {
     private int quantity;
     private double price;
+
+    public ShoppingItem(int id, String content, Date addDate, Date updateDate, int quantity, double price, Optional<Integer> listId) {
+        super(id, content, addDate, updateDate, listId);
+        this.quantity = quantity;
+        this.price = price;
+    }
 
     public ShoppingItem(int id, String content, Date addDate, Date updateDate, int quantity, double price) {
         super(id, content, addDate, updateDate);

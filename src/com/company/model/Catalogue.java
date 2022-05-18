@@ -27,6 +27,19 @@ public class Catalogue {
         this.list = list;
     }
 
+    public Catalogue(int id, String listName, Date addDate) {
+        this.id = id;
+        this.listName = listName;
+        this.addDate = addDate;
+    }
+
+    public Catalogue(int id, String listName) {
+        this.id = id;
+        this.listName = listName;
+        this.addDate = new Date();
+        this.nrOfItems = 0;
+    }
+
     public void addToList(Item itemToBeAdded) {
         this.list.add(itemToBeAdded);
         this.uniqueList.add(itemToBeAdded);

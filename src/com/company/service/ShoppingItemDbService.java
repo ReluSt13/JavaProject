@@ -5,10 +5,8 @@ import com.company.model.Item;
 import com.company.model.ShoppingItem;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import java.util.Date;
-import java.util.List;
 import java.util.function.Predicate;
 
 public class ShoppingItemDbService implements ItemService{
@@ -21,8 +19,7 @@ public class ShoppingItemDbService implements ItemService{
 
     @Override
     public void add(Item itemToAdd) {
-
-        String query = "insert into shoppingitem values (?, ?, ?, ?, ?, ?)";
+        String query = "insert into shoppingitem values (?, ?, ?, ?, ?, ?, null)";
         try(PreparedStatement preparedStatement = connection.prepareStatement(query)){
             preparedStatement.setInt(1, itemToAdd.getId());
             preparedStatement.setString(2, itemToAdd.getContent());
@@ -58,7 +55,11 @@ public class ShoppingItemDbService implements ItemService{
                     updateDate = new Date(resultSet.getTimestamp(4).getTime());
                 int quantity = resultSet.getInt(5);
                 double price = resultSet.getDouble(6);
-                shopItemToReturn = new ShoppingItem(Id, content, addDate, updateDate, quantity, price);
+                Optional<Integer> listId = Optional.ofNullable(resultSet.getInt(7));
+                if(resultSet.wasNull()) {
+                    listId = Optional.ofNullable(null);
+                }
+                shopItemToReturn = new ShoppingItem(Id, content, addDate, updateDate, quantity, price, listId);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -81,7 +82,11 @@ public class ShoppingItemDbService implements ItemService{
                     updateDate = new Date(resultSet.getTimestamp(4).getTime());
                 int quantity = resultSet.getInt(5);
                 double price = resultSet.getDouble(6);
-                shoppingItems.add(new ShoppingItem(id, content, addDate, updateDate, quantity, price));
+                Optional<Integer> listId = Optional.ofNullable(resultSet.getInt(7));
+                if(resultSet.wasNull()) {
+                    listId = Optional.ofNullable(null);
+                }
+                shoppingItems.add(new ShoppingItem(id, content, addDate, updateDate, quantity, price, listId));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -106,7 +111,11 @@ public class ShoppingItemDbService implements ItemService{
                     updateDate = new Date(resultSet.getTimestamp(4).getTime());
                 int quantity = resultSet.getInt(5);
                 double price = resultSet.getDouble(6);
-                shoppingItemsBetweenDates.add(new ShoppingItem(id, content, addDate, updateDate, quantity, price));
+                Optional<Integer> listId = Optional.ofNullable(resultSet.getInt(7));
+                if(resultSet.wasNull()) {
+                    listId = Optional.ofNullable(null);
+                }
+                shoppingItemsBetweenDates.add(new ShoppingItem(id, content, addDate, updateDate, quantity, price, listId));
             }
         } catch (SQLException e) {
             e.printStackTrace();

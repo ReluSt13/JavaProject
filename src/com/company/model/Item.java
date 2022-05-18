@@ -1,15 +1,24 @@
 package com.company.model;
 
 import java.util.Date;
+import java.util.Optional;
 //import java.time.LocalDate;
 
 public class Item {
     private int id;
     private static int id_max = 0;
+    private Optional<Integer> listId;
     private String content;
     private Date addDate;
     private Date updateDate;
 
+    public Item(int id, String content, Date addDate, Date updateDate, Optional<Integer> listId) {
+        this.id = id;
+        this.content = content;
+        this.addDate = addDate;
+        this.updateDate = updateDate;
+        this.listId = listId;
+    }
     public Item(int id, String content, Date addDate, Date updateDate) {
         this.id = id;
         this.content = content;
@@ -34,7 +43,7 @@ public class Item {
     }
 
     public void print() {
-        System.out.println("ID: " + id + "\nContent: " + content + "\nAdd Date: " + addDate + "\nUpdate Date: " + updateDate);
+        System.out.println("ID: " + id + "\nContent: " + content + "\nAdd Date: " + addDate + "\nUpdate Date: " + updateDate + "\nList ID: " + (listId.isEmpty() ? "null" : listId.get()));
     }
 
     public int getId() {

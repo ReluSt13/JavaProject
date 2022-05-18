@@ -19,7 +19,6 @@ public class ShoppingList extends Catalogue {
 
     }
 
-
     public ShoppingList(String listName, double maxPrice) {
         super(listName);
         this.maxPrice = maxPrice;
@@ -27,10 +26,22 @@ public class ShoppingList extends Catalogue {
         this.uniqueActualPrice = 0;
     }
 
+    public ShoppingList(int id, String listName, Date addDate, double maxPrice, double actualPrice){
+        super(id, listName, addDate);
+        this.maxPrice = maxPrice;
+        this.actualPrice = actualPrice;
+    }
+
     public ShoppingList(int id, String listName, int nrOfItems, Date addDate, double actualPrice, double maxPrice, List<Item> list) {
         super(id, listName, nrOfItems, addDate, list);
         this.maxPrice = maxPrice;
         this.actualPrice = actualPrice;
+    }
+
+    public ShoppingList(int id, String listName, double maxPrice) {
+        super(id, listName);
+        this.maxPrice = maxPrice;
+        this.actualPrice = 0;
     }
 
     public void updateMaxPrice(double newMaxPrice) {

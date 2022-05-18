@@ -175,13 +175,16 @@ public class Main {
 //            shoppingListService.add(sl);
 
             ShoppingItemDbService shoppingItemDbService = new ShoppingItemDbService();
+
 //            shoppingItemDbService.add(new ShoppingItem("first shopping item", 10, 4.67));
+//
 //            shoppingItemDbService.add(new ShoppingItem("second shopping item", 5, 1.97));
 //            shoppingItemDbService.add(new ShoppingItem("third shopping item", 3, 14.62));
 
             List<Item> shopItemsFromDb = shoppingItemDbService.getAll();
-//            shopItemsFromDb.forEach(itm -> itm.print());
-            System.out.println("#######################################");
+            shopItemsFromDb.forEach(itm -> itm.print());
+
+//            System.out.println("#######################################");
 //            shoppingItemDbService.updateContent(17, "updated second shopping item");
 //            shoppingItemDbService.getById(17).print();
 //            shoppingItemDbService.delete(shoppingItemDbService.getById(16));
@@ -197,9 +200,19 @@ public class Main {
             ToDoItemDbService toDoItemDbService = new ToDoItemDbService();
 //            toDoItemDbService.add(new ToDoItem("second to do item"));
 //            toDoItemDbService.updateCompleteStatus(3, true);
-            toDoItemDbService.updateContent(0, "updated second to do item");
+//            toDoItemDbService.updateContent(0, "updated second to do item");
 //            toDoItemDbService.delete(toDoItemDbService.getById(3));
-            toDoItemDbService.getAll().forEach(Item::print);
+//            toDoItemDbService.getAll().forEach(Item::print);
+
+
+            ShoppingListDbService shoppingListDbService = new ShoppingListDbService();
+            shoppingListDbService.add(new ShoppingList("FIRST SHOPPING LIST", 1000));
+            shoppingListDbService.add(new ShoppingList(1, "SECOND SHOPPING LIST", 600));
+            shoppingListDbService.addItem(0, new ShoppingItem("firstAddedShopping Item", 13, 0.13));
+            shoppingListDbService.addItem(0, new ShoppingItem("SecondAddedShopping Item", 10, 6.52));
+            shoppingListDbService.addItem(1, new ShoppingItem("THIRDAddedShopping Item", 9, 1.9));
+            shoppingListDbService.delete(shoppingListDbService.getById(1));
+            shoppingListDbService.assignItemToList(0, 2);
 
         } catch (Exception e) {
                 System.out.println(e.getMessage());
