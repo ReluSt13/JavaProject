@@ -40,7 +40,7 @@ public class ToDoListDbService implements ListService{
                 int Id = resultSet.getInt(1);
                 String listName = resultSet.getString(2);
                 Date addDate = new Date(resultSet.getTimestamp(3).getTime());
-                Double percentageComplete = resultSet.getDouble(4);
+                double percentageComplete = resultSet.getDouble(4);
                 catalogueToReturn = new ToDoList(Id, listName, addDate, percentageComplete);
             }
         } catch (SQLException e) {
@@ -59,7 +59,7 @@ public class ToDoListDbService implements ListService{
                 int Id = resultSet.getInt(1);
                 String listName = resultSet.getString(2);
                 Date addDate = new Date(resultSet.getTimestamp(3).getTime());
-                Double percentageComplete = resultSet.getDouble(4);
+                double percentageComplete = resultSet.getDouble(4);
                 cataloguesToReturn.add(new ToDoList(Id, listName, addDate, percentageComplete));
             }
         } catch (SQLException e) {
@@ -159,6 +159,31 @@ public class ToDoListDbService implements ListService{
             preparedStatement.setString(1, newName);
             preparedStatement.setInt(2, id);
             preparedStatement.executeUpdate();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void assignItemToList(int listId, int itemId) {
+        String query = "update todoitem set listId = (?) where id = (?)";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, listId);
+            preparedStatement.setInt(2, itemId);
+            preparedStatement.executeUpdate();
+            updatePercentageComplete(listId);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void updateCompleteStatusOfItem(int listId, int itemId, boolean status) {
+        String query = "update todoitem set isCompleted = (?) where id = (?) and listId = (?)";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setBoolean(1, status);
+            preparedStatement.setInt(2, itemId);
+            preparedStatement.setInt(3, listId);
+            preparedStatement.executeUpdate();
+            updatePercentageComplete(listId);
         } catch (SQLException e){
             e.printStackTrace();
         }

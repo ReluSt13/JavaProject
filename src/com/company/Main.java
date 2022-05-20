@@ -205,7 +205,7 @@ public class Main {
 //            toDoItemDbService.getAll().forEach(Item::print);
 
 
-//            ShoppingListDbService shoppingListDbService = new ShoppingListDbService();
+            ShoppingListDbService shoppingListDbService = new ShoppingListDbService();
 //            shoppingListDbService.add(new ShoppingList("FIRST SHOPPING LIST", 1000));
 //            shoppingListDbService.add(new ShoppingList(1, "SECOND SHOPPING LIST", 600));
 //            shoppingListDbService.addItem(0, new ShoppingItem("firstAddedShopping Item", 13, 0.13));
@@ -215,14 +215,19 @@ public class Main {
 //            shoppingListDbService.assignItemToList(0, 2);
 
             ToDoItemDbService toDoItemDbService = new ToDoItemDbService();
-            toDoItemDbService.add(new ToDoItem("first to do item", true));
-            toDoItemDbService.add(new ToDoItem("second to do item"));
+//            toDoItemDbService.add(new ToDoItem("first to do item", true));
+//            toDoItemDbService.add(new ToDoItem("second to do item"));
 
             toDoItemDbService.getAll().forEach(Item::print);
             ToDoListDbService toDoListDbService = new ToDoListDbService();
-            toDoListDbService.add(new ToDoList("first to do list"));
-            toDoListDbService.addItem(0, new ToDoItem("to do item", true));
-            toDoListDbService.addItem(0, new ToDoItem("to do item", false));
+//            toDoListDbService.add(new ToDoList("first to do list"));
+//            toDoListDbService.addItem(0, new ToDoItem("to do item", true));
+//            toDoListDbService.addItem(0, new ToDoItem("to do item", false));
+//            toDoListDbService.assignItemToList(0, 0);
+            toDoListDbService.updateCompleteStatusOfItem(0, 0, true);
+            shoppingListDbService.updateMaxPrice(0, 1309);
+            shoppingListDbService.updatePriceOfItem(0, 1, 7.69);
+            shoppingListDbService.updateQuantityOfItem(0, 2, 12);
 
 
         } catch (Exception e) {

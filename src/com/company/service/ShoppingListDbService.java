@@ -42,7 +42,7 @@ public class ShoppingListDbService implements ListService{
                 int Id = resultSet.getInt(1);
                 String listName = resultSet.getString(2);
                 Date addDate = new Date(resultSet.getTimestamp(3).getTime());
-                Double maxPrice = resultSet.getDouble(4);
+                double maxPrice = resultSet.getDouble(4);
                 double actualPrice = resultSet.getDouble(5);
                 catalogueToReturn = new ShoppingList(Id, listName, addDate, maxPrice, actualPrice);
             }
@@ -62,7 +62,7 @@ public class ShoppingListDbService implements ListService{
                 int Id = resultSet.getInt(1);
                 String listName = resultSet.getString(2);
                 Date addDate = new Date(resultSet.getTimestamp(3).getTime());
-                Double maxPrice = resultSet.getDouble(4);
+                double maxPrice = resultSet.getDouble(4);
                 double actualPrice = resultSet.getDouble(5);
                 cataloguesToReturn.add(new ShoppingList(Id, listName, addDate, maxPrice, actualPrice));
             }
@@ -117,7 +117,7 @@ public class ShoppingListDbService implements ListService{
         updateActualPrice(id);
     }
 
-    public List<Item> getAllWithNListId(int N) {
+    private List<Item> getAllWithNListId(int N) {
         String getAllItemsWithNListId = "select * from shoppingitem where listId = (?)";
         List<Item> shoppingItemsWithNListId = new ArrayList<>();
         try(PreparedStatement preparedStatement = connection.prepareStatement(getAllItemsWithNListId)) {
@@ -141,7 +141,7 @@ public class ShoppingListDbService implements ListService{
         return shoppingItemsWithNListId;
     }
 
-    public void updateActualPrice(int id) {
+    private void updateActualPrice(int id) {
         List<Item> getItems = getAllWithNListId(id);
         double ActualPrice = 0;
         for (Item item :
@@ -181,5 +181,42 @@ public class ShoppingListDbService implements ListService{
         } catch (SQLException e){
             e.printStackTrace();
         }
+     }
+
+     public void updateMaxPrice(int listId, double newMaxPrice) {
+         String query = "update shoppinglist set maxPrice = (?) where id = (?)";
+         try(PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+             preparedStatement.setDouble(1, newMaxPrice);
+             preparedStatement.setInt(2, listId);
+             preparedStatement.executeUpdate();
+         } catch (SQLException e){
+             e.printStackTrace();
+         }
+     }
+
+     public void updatePriceOfItem(int listId, int itemId, double newPrice) {
+         String query = "update shoppingitem set price = (?) where id = (?) and listId = (?)";
+         try(PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+             preparedStatement.setDouble(1, newPrice);
+             preparedStatement.setInt(2, itemId);
+             preparedStatement.setInt(3, listId);
+             preparedStatement.executeUpdate();
+             updateActualPrice(listId);
+         } catch (SQLException e){
+             e.printStackTrace();
+         }
+     }
+
+     public void updateQuantityOfItem(int listId, int itemId, int newQuantity) {
+         String query = "update shoppingitem set quantity = (?) where id = (?) and listId = (?)";
+         try(PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+             preparedStatement.setInt(1, newQuantity);
+             preparedStatement.setInt(2, itemId);
+             preparedStatement.setInt(3, listId);
+             preparedStatement.executeUpdate();
+             updateActualPrice(listId);
+         } catch (SQLException e){
+             e.printStackTrace();
+         }
      }
 }
